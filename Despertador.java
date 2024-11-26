@@ -1,30 +1,29 @@
-// import java.awt.*;
-// import java.awt.event.*;
 import java.time.*;
 import java.util.*;
 import javax.sound.sampled.*;
 
-public class Despertador {    
-    public static void main(String[] str) {
-        
+public class Despertador {
+    public static void main(String[] args) {
         int horaAtual = LocalDateTime.now().getHour();
-        int minutoAtual = LocalDateTime.now().getMinute();
-        int segundoAtual = LocalDateTime.now().getSecond();
-
         int horaDespertar = -1;
-        int minutoDespertar = -1;
+        int horaRestante = -1;
 
-        int horaRestante;
-        int minutoRestante;
-        int segundoRestante;
+        int minutoAtual = LocalDateTime.now().getMinute();
+        int minutoDespertar = -1;
+        int minutoRestante = -1;
+
+        int segundoAtual = LocalDateTime.now().getSecond();
+        int segundoRestante = -1;
 
         boolean adiarDespertador = false;
-        boolean encerrarDespertador = false;
+        int tempoMaximoSoneca = 10;
         boolean volumeCrescente = false;
+        boolean encerrarDespertador = false;
         boolean respostaErrada = true;
 
-        String nomeDespertador;        
         String respostaUsuario;
+
+        String nomeDespertador;
 
         Scanner inputScanner = new Scanner(System.in);
 
@@ -36,58 +35,102 @@ public class Despertador {
             segundoAtual = LocalDateTime.now().getSecond();
 
             System.out.println("Agora são: " + horaAtual + "h:" + minutoAtual + "m:" + segundoAtual + "s");
-    
             System.out.println("Digite abaixo SOMENTE NÚMERO INTEIRO (de 0 a 23) a hora do despertador e tecle enter:");
-            respostaUsuario = inputScanner.nextLine();
-            
-            try {   
+            respostaUsuario = inputScanner.nextLine().trim();
+            try {
                 horaDespertar = Integer.valueOf(respostaUsuario);
                 respostaErrada = false;
             } catch (Exception e) {
                 // System.err.println("Erro: " + e);
-                System.out.println("Resposta inváida! Verifique sua digitação e tente novamente.");
+                System.out.println("Resposta inválida! Verifique sua digitação e tente novamente.");
                 try {
                     Thread.sleep(5000);
-                } catch (Exception exception) {
-                    System.err.println("Erro: " + exception);
+                } catch (Exception ev) {
+                    System.err.println("Erro: " + ev);
                 }
             }
         }
-        
-        System.out.println("Digite abaixo SOMENTE o minuto do despertador e tecle enter:");
-        respostaUsuario = inputScanner.nextLine();
-        minutoDespertar = Integer.valueOf(respostaUsuario);
-        
 
-        System.out.println("Deseja adiar o alarme quando tocar?");
-        System.out.println("Digite a opção abaixo e tecle enter:");
-        System.out.println("[s] - Sim");
-        System.out.println("[n] - Não");
+        respostaErrada = true;
+        while (respostaErrada == true) {
+            clearScreen();
 
-        respostaUsuario = inputScanner.nextLine();
+            horaAtual = LocalDateTime.now().getHour();
+            minutoAtual = LocalDateTime.now().getMinute();
+            segundoAtual = LocalDateTime.now().getSecond();
 
-        if(respostaUsuario.equals("s") || respostaUsuario.equals("S")) {
-            adiarDespertador = true;
-        } else if (respostaUsuario.equals("n") || respostaUsuario.equals("N")){
-            adiarDespertador = false;
+            System.out.println("Agora são: " + horaAtual + "h:" + minutoAtual + "m:" + segundoAtual + "s");
+            System.out.println("Digite abaixo SOMENTE NÚMERO INTEIRO (de 0 a 59) o minuto do despertador e tecle enter:");
+            respostaUsuario = inputScanner.nextLine().trim();
+            try {
+                minutoDespertar = Integer.valueOf(respostaUsuario);
+                respostaErrada = false;
+            } catch (Exception e) {
+                // System.err.println("Erro: " + e);
+                System.out.println("Resposta inválida! Verifique sua digitação e tente novamente.");
+                try {
+                    Thread.sleep(5000);
+                } catch (Exception ev) {
+                    System.err.println("Erro: " + ev);
+                }
+            }
         }
 
+        respostaErrada = true;
+        while (respostaErrada == true) {
+            clearScreen();
+            System.out.println("Deseja adiar o alarme quando tocar?");
+            System.out.println("Digite a opção abaixo e tecle enter:");
+            System.out.println("[s] - Sim");
+            System.out.println("[n] - Não");
+
+            respostaUsuario = inputScanner.nextLine();
+            if (respostaUsuario.trim().equals("s") || respostaUsuario.trim().equals("S")) {
+                adiarDespertador = true;
+                respostaErrada = false;
+            } else if (respostaUsuario.equals("n") || respostaUsuario.equals("N")) {
+                adiarDespertador = false;
+                respostaErrada = false;
+            } else {
+                System.out.println("Resposta inválida! Verifique sua digitação e tente novamente.");
+                try {
+                    Thread.sleep(5000);
+                } catch (Exception ev) {
+                    System.err.println("Erro: " + ev);
+                }
+            }
+        }
+
+        clearScreen();
         System.out.println("Digite abaixo o nome do despertador e tecle enter:");
 
         respostaUsuario = inputScanner.nextLine();
         nomeDespertador = respostaUsuario;
-        
-        System.out.println("Deseja o volume crescente?");
-        System.out.println("Digite abaixo a opção desejada e tecle Enter:");
-        System.out.println("[s] - Sim");
-        System.out.println("[n] - Não");
-        
-        respostaUsuario = inputScanner.nextLine();
 
-        if(respostaUsuario.equals("s") || respostaUsuario.equals("S")) {
-            volumeCrescente = true;
-        } else if (respostaUsuario.equals("n") || respostaUsuario.equals("N")){
-            volumeCrescente = false;
+        respostaErrada = true;
+        while (respostaErrada == true) {
+            clearScreen();
+
+            System.out.println("Deseja o volume crescente?");
+            System.out.println("Digite abaixo a opção desejada e tecle Enter:");
+            System.out.println("[s] - Sim");
+            System.out.println("[n] - Não");
+
+            respostaUsuario = inputScanner.nextLine();
+            if (respostaUsuario.equals("s") || respostaUsuario.equals("S")) {
+                volumeCrescente = true;
+                respostaErrada = false;
+            } else if (respostaUsuario.equals("n") || respostaUsuario.equals("N")) {
+                volumeCrescente = false;
+                respostaErrada = false;
+            } else {
+                System.out.println("Resposta inválida! Verifique sua digitação e tente novamente.");
+                try {
+                    Thread.sleep(5000);
+                } catch (Exception ev) {
+                    System.err.println("Erro: " + ev);
+                }
+            }
         }
 
         while (encerrarDespertador == false) {
@@ -97,56 +140,71 @@ public class Despertador {
             minutoAtual = LocalDateTime.now().getMinute();
             segundoAtual = LocalDateTime.now().getSecond();
 
-            horaRestante = horaDespertar - horaAtual;
-            minutoRestante = (minutoDespertar - minutoAtual) - 1;
-            segundoRestante = 59 - segundoAtual;
+            if (horaAtual > 0) {
+                horaRestante = (24 - horaAtual) + horaDespertar;
+            } else {
+                horaRestante = horaDespertar;
+            }
 
-            if (horaRestante > 0 && minutoDespertar <= minutoAtual) {
-                horaRestante--;
+            if (minutoAtual > 0) {
+                minutoRestante = (60 - minutoAtual) + minutoDespertar;
+            } else {
+                minutoRestante = minutoDespertar;
             }
-    
-            if (minutoRestante < 0) {
-                minutoRestante = ((59 - minutoAtual) + minutoDespertar) - 1;
+
+            if (segundoAtual > 0) {
+                segundoRestante = 60 - segundoAtual;
+            } else {
+                segundoRestante = segundoAtual;
             }
-    
+
             if (segundoRestante > 59) {
-                segundoRestante = 59;
+                segundoRestante = 0;
             }
 
-            if(horaAtual == horaDespertar && minutoAtual == minutoDespertar){
+            if (horaAtual == horaDespertar && minutoAtual >= minutoDespertar && minutoAtual <= (minutoDespertar + tempoMaximoSoneca)) {
                 tocarSom(volumeCrescente);
-                System.out.println("O despertador: " + nomeDespertador + "está ativo.");
+                System.out.println("O despertador: " + nomeDespertador + " está ativo.");
                 if (adiarDespertador == true) {
-                    System.out.println("Adiar alarme?");
-                    System.out.println("Digite abaixo a opção e tecle enter");
-                    System.out.println("[5] - adiar 5 minutos");
-                    System.out.println("[10] - adiar 10 minutos");
-                    System.out.println("[s] - sair");
-                    respostaUsuario = inputScanner.nextLine().trim();
-                    if(respostaUsuario.equals("s") || respostaUsuario.equals("S")) {
-                        System.exit(0);
-                    } else if (respostaUsuario.equals("5")) {
-                        minutoDespertar += 5;
-                    } else if (respostaUsuario.equals("10")) {
-                        minutoDespertar += 10;
-                    } else {
-                        System.out.println("Opção inválida!");
+                    respostaErrada = true;
+                    while (respostaErrada == true) {
+                        System.out.println("Adiar alarme?");
+                        System.out.println("Digite abaixo a opção desejada e tecle enter:");
+                        System.out.println("[5] - adiar 5 minutos");
+                        System.out.println("[10] - adiar 10 minutos");
+                        System.out.println("[s] - sair");
+                        respostaUsuario = inputScanner.nextLine().trim();
+                        if (respostaUsuario.equals("s") || respostaUsuario.equals("S")) {
+                            inputScanner.close();
+                            System.exit(0);
+                        } else if (respostaUsuario.equals("5")) {
+                            minutoDespertar += 5;
+                            respostaErrada = false;
+                        } else if (respostaUsuario.equals("10")) {
+                            minutoDespertar += 10;
+                            respostaErrada = false;
+                        } else {
+                            System.out.println("Resposta inválida! Verifique sua digitação e tente novamente.");
+                            try {
+                                Thread.sleep(5000);
+                            } catch (Exception ev) {
+                                System.err.println("Erro: " + ev);
+                            }
+                        }
                     }
                     if (minutoDespertar > 59) {
                         minutoDespertar -= 59;
                         horaDespertar++;
-                        if(horaDespertar > 23) {
+                        if (horaDespertar > 23) {
                             horaDespertar = 0;
                         }
                     }
                 }
-
-                encerrarDespertador = true;
             }
 
             System.out.println("Agora são: " + horaAtual + "h:" + minutoAtual + "m:" + segundoAtual + "s");
 
-            System.out.println("O alarme irá despertar às: " + horaDespertar + "h: " + minutoDespertar + "m");
+            System.out.println("O alarme irá despertar às: " + horaDespertar + "h:" + minutoDespertar + "m");
 
             System.out.println("Faltam: " + horaRestante + " hora(s), " + minutoRestante + " minuto(s), " + segundoRestante + " segundos para o próximo alarme.");
 
@@ -156,58 +214,58 @@ public class Despertador {
                 System.err.println("Erro: " + e);
             }
         }
+        inputScanner.close();
     }
 
     public static void clearScreen() {
-        System.out.println("\033[H\033[2J");
+        System.out.print("\033[H\033[2J");
         System.out.flush();
     }
 
     public static synchronized void tocarSom(boolean volumeCrescente) {
-        new Thread(new Runnable(){
+        new Thread(new Runnable() {
             public void run() {
-                try{
+                try {
                     Clip clip = AudioSystem.getClip();
-                    AudioInputStream inputStream = AudioSystem.getAudioInputStream(
-                        Despertador.class.getResourceAsStream("./musica.wav"));
+                    AudioInputStream inputStream = AudioSystem.getAudioInputStream(Despertador.class.getResourceAsStream("./see-you-later-203103.wav"));
                     clip.open(inputStream);
+                    clip.start();
 
-                    if(volumeCrescente == true){
+                    if (volumeCrescente == true) {
                         FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-                        float volumeMinimo = -30.0f; 
-                        float volumeMaximo = 0.0f; 
-                        float voluemAumentar = 6.0f; 
-                        gainControl.setValue(volumeMinimo);
+                        float volumeMinimo = -30.0f;
+                        float volumeMaximo = 0.0f;
+                        float volumeAumentar = 6.0f;
+                        gainControl.setValue(volumeMinimo); // Reduce volume by 10 decibels.
                         boolean aumentarVolume = true;
-                        long clipTime;
-                        
-                        while (aumentarVolume == true) {
-                            clip.start();
-                            if(gainControl.getValue() >= volumeMinimo && gainControl.getValue() <= volumeMaximo) {
-                                gainControl.setValue(gainControl.getValue() + voluemAumentar);
-                                clipTime = clip.getMicrosecondPosition();
 
+                        long clipTime;
+                        while (aumentarVolume == true) {
+                            if (gainControl.getValue() >= volumeMinimo && gainControl.getValue() <= volumeMaximo) {
+                                clipTime = clip.getMicrosecondPosition();
+                                clip.stop();
+                                gainControl.setValue(gainControl.getValue() + volumeAumentar);
+                                clip.setMicrosecondPosition(clipTime);
+                                clip.start();
                                 try {
                                     Thread.sleep(1000);
-                                } catch(Exception e) {
+                                } catch (Exception e) {
                                     System.err.println("Erro: " + e);
                                 }
-
-                                clip.stop();
-                                clip.setMicrosecondPosition(clipTime);
+                                // System.out.println("clip.getMicrosecondPosition(): " + clip.getMicrosecondPosition());
                             } else {
                                 aumentarVolume = false;
                             }
+                            System.out.println("gainControl.getValue(): " + gainControl.getValue());
                         }
                     } else {
+                        clip.stop();
                         clip.start();
                     }
-
                 } catch (Exception e) {
                     System.err.println(e.getMessage());
                 }
             }
         }).start();
     }
-    
 }
